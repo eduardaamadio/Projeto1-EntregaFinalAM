@@ -34,20 +34,3 @@ F0 = 0 → ponto aceso
 F0 = 1 → ponto apagado
 
 Por fim, o valor completo é enviado para o display com MOV P1, A.
-
-
-
-
-
-
-
-Diferentemente do 3º checkpoint, agora foi utilizada a interrupção do Timer 1 (o vetor 001BH). Sempre que o motor completa o ciclo de 10 voltas, o hardware avisa o código e chama a sub-rotina RESET_CONT. 
-Para o controle de sentido (uso da chave SW0), dentro do loop principal, fica "chamando" (ACALL VERIFICA_SW) a sub-rotina que olha para a chave P2.0.
-Se o operador mudar a chave de lado, o sistema detecta essa transição (usando o bit F0 como memória).
-Quando muda o sentido, o motor inverte (via pinos P3.0 e P3.1) e a contagem de voltas zera na hora, para não misturar as voltas de um sentido com o outro.
-
-Para mostrar os números de 0 a 9 no display, o sistema captura o valor atual do contador (MOV A, TL1). Como o contador trabalha na faixa de 246 a 255, eu limpo o bit de carry (CLR C) e faço uma subtração pela base (SUBB A, #0F6H) para ajustar a escala para 0-9. Com esse valor, o código aponta para a memória (MOV DPTR, #TABELA) e busca o padrão de bits correto (MOVC A, @A+DPTR).
-
-A sinalização visual do sentido de rotação foi feita usando o ponto decimal do display (pino P1.7). 
-
-Por fim, a tabela contém os códigos hexadecimais para formar os números de 0 a 9 no display de 7 segmentos.
